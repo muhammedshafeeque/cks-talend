@@ -1,0 +1,13 @@
+.header{
+    width: 100%;
+    height: 60px;
+    background-color: rgb(1, 1, 139);
+    justify-content:color;
+    display:flex;
+    
+
+}
+.header h2{
+    color: white;
+    margin-left: 10px;
+}

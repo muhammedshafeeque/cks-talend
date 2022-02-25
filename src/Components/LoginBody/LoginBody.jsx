@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./login.css";
-import axios from '../../Constants/axios'
+
 
 function LoginBody() {
   const [member,setMember]=useState(false)
@@ -9,10 +9,6 @@ function LoginBody() {
   const findMember=(e)=>{
   
       if(e.target.value.length===11){
-        axios.post(`/check-member`,{member:e.target.value}).then((res)=>{
-          console.log(res.data)
-        })
-
         setMessage(null)
       }else{
         setMessage('Pleas Enter A valid Membership number')

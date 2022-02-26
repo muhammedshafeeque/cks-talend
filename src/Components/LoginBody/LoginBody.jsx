@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import "./login.css";
+import {Firebase,db} from '../../Config/FirebaseConfig'
+
+
 
 
 function LoginBody() {
@@ -16,6 +19,9 @@ function LoginBody() {
     
   }
   const manageSubmit=()=>{
+    db.collection().then((res)=>{
+      console.log(res.data)
+    })
     setMember(true)
     
   }

@@ -1,47 +1,64 @@
 import React, { useState } from "react";
 import "./login.css";
 import axios from '../../Constants/axios'
+import {Spinner} from 'react-bootstrap'
+import VerifyOtp from "../../Modals/VerifyOtp";
+
 
 function LoginBody() {
-  const [member,setMember]=useState(false)
+
   const [memNumber,setMemNumber]=useState(null)
   const [message,setMessage]=useState(null)
+  const [verify,setVerify]=useState(false)
+  const [spinner,setSpinner]=useState(false)
   const findMember=(e)=>{
   
       if(e.target.value.length===11){
+        setSpinner(true)
         axios.post(`/check-member`,{member:e.target.value}).then((res)=>{
-          console.log(res.data)
+          
+          if(!res.data.status){
+            setMessage(res.data.message)
+          }else{
+            setMessage(null)
+            setMemNumber(e.target.value)
+          }
+          setSpinner(false)
         })
-
-        setMessage(null)
       }else{
+        setSpinner(false)
         setMessage('Pleas Enter A valid Membership number')
       }
     
   }
-  const manageSubmit=()=>{
-    setMember(true)
+  const manageSubmit=(e)=>{
+    
+    setSpinner(true)
+    setMessage(null)
+    if(memNumber){
+      axios.post(`/submit-login`,{member:memNumber}).then((res)=>{
+        if(res.data.status){
+          setSpinner(false)
+          setMessage(res.data.message)
+          setVerify(true)
+          
+        }else{
+          setMessage(res.data.message)
+          setSpinner(false)
+        }
+      })
+    }else{
+      setMessage('Pleas Enter A valid Membership number')
+    setSpinner(false)
+    }
+    
     
   }
-  const submitOTP=()=>{
-
-  }
+  
   return (
     <>
-    {member?<div className="login_body">
-      <div className="login_body_parent">
-        <input
-          maxLength="6"
-          type="text"
-          placeholder="Enter OTP  "
-          required
-          className="form-control"
-        />
-      </div>
-      <div className="login_body_parent">
-        <button onClick={submitOTP}>Submit</button>
-      </div>
-    </div>:<div className="login_body">
+
+    <div className="login_body">
       <div className="login_body_parent">
         <input
           maxLength="11"
@@ -53,12 +70,13 @@ function LoginBody() {
           className="form-control"
         />
       </div>
-      {message&&<p className="login-message">{message}</p>}
+      {spinner?"":<div>{message&&<p className="login-message">{message}</p>}</div>}
+      
       <div className="login_body_parent">
-       
-        <button onClick={manageSubmit}>Submit</button>
+       {spinner?<Spinner animation="border" variant="primary" />:<button onClick={manageSubmit}>Submit</button>} 
       </div>
-    </div>}
+    </div>
+    {verify&&<VerifyOtp  setVerify={setVerify}/>}
     
     </>
   );

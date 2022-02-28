@@ -1,0 +1,23 @@
+.otp-inner-div{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+.otp-inner-div input {
+    padding-left: 20px;
+    border-radius: 30px;
+    height: 35px;
+    margin: 0 20px 0 20px;
+    outline: none;
+    
+}
+.otp-inner-div button{
+    min-height: 35px;
+    min-width: 70px;
+    margin-top: 20px;
+    border: none;
+    outline: none;
+    background-color: blue;
+    color: white;
+    border-radius: 5px;
+}

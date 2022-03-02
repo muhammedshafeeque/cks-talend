@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import {Modal} from "react-bootstrap"
 import './verify.css'
-import axios from '../Constants/axios'
+
 function VerifyOtp({setVerify}) {
     const [smShow, setSmShow] = useState(true)
     const [otp,setOtp]=useState(null)
@@ -9,9 +9,9 @@ function VerifyOtp({setVerify}) {
     const manageSubmit=(e)=>{
         if(otp){
             if(otp.length===6){
-                axios.post('/verify-otp', {otp:otp}).then((res)=>{
-                  console.log(res.data)
-                })
+                // axios.post('/verify-otp', {otp:otp}).then((res)=>{
+                //   console.log(res.data)
+                // })
             }else{
                 setMessage('Enter Valid OTP')
             }

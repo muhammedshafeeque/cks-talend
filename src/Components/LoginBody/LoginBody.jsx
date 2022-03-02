@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./login.css";
-import axios from '../../Constants/axios'
+import membersDataServices from '../../Service/user-services'
+import authServices from "../../Service/auth-services";
 import {Spinner} from 'react-bootstrap'
 import VerifyOtp from "../../Modals/VerifyOtp";
 
@@ -11,20 +12,22 @@ function LoginBody() {
   const [message,setMessage]=useState(null)
   const [verify,setVerify]=useState(false)
   const [spinner,setSpinner]=useState(false)
-  const findMember=(e)=>{
-  
-      if(e.target.value.length===11){
+  const findMember= async(e)=>{
+      // const data= await membersDataServices.getAllmembers()
+      // console.log(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      if(e.target.value.length===10){
+
         setSpinner(true)
-        axios.post(`/check-member`,{member:e.target.value}).then((res)=>{
-          
-          if(!res.data.status){
-            setMessage(res.data.message)
-          }else{
-            setMessage(null)
-            setMemNumber(e.target.value)
-          }
+        let member=await membersDataServices.getMember(parseInt(e.target.value))
+        if(member.length!=0){
+          setMessage(null)
+          setMemNumber(e.target.value)
+        }else{
+          console.log('no data found')
+          setMessage('Invalid Membership number')
+        }
           setSpinner(false)
-        })
+        
       }else{
         setSpinner(false)
         setMessage('Pleas Enter A valid Membership number')
@@ -35,18 +38,19 @@ function LoginBody() {
     
     setSpinner(true)
     setMessage(null)
+    authServices.requestOTP()
     if(memNumber){
-      axios.post(`/submit-login`,{member:memNumber}).then((res)=>{
-        if(res.data.status){
-          setSpinner(false)
-          setMessage(res.data.message)
-          setVerify(true)
+      // axios.post(`/submit-login`,{member:memNumber}).then((res)=>{
+      //   if(res.data.status){
+      //     setSpinner(false)
+      //     setMessage(res.data.message)
+      //     setVerify(true)
           
-        }else{
-          setMessage(res.data.message)
-          setSpinner(false)
-        }
-      })
+      //   }else{
+      //     setMessage(res.data.message)
+      //     setSpinner(false)
+      //   }
+      // })
     }else{
       setMessage('Pleas Enter A valid Membership number')
     setSpinner(false)
